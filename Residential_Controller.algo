@@ -1,1 +1,115 @@
-aa
+// This Sequence will control the movement of Elevators in a residential building with 2 Elevators and 10 floors.
+
+Objects to be controlled:
+ Column is the pack of elevator, which is only 1 in our residential case.
+ Cage is being reffered to as Elevator in my algorithim
+ Call button,  which I have named as OutsideButton
+ Doors, which are being controlled by OpEND SEQUENCEoor and CloseDoor function
+ Floor request button, which I have named as InsideButton
+
+Input, Outputs and Variables: 
+
+InsideButton, Ousidebutton, TotalFloor, idle
+
+MoveUp, MoveDown, OpEND SEQUENCEoor, CloseDoor 
+
+
+Sequence press OutsideButton
+    When Outside Button pressed
+    Input Current Floor and required Direction (UP or DOWN)
+    Call Sequence FindElevator
+END SEQUENCE Sequence
+
+Sequence press InsideButton
+    When inside button pressed
+    Input Target Floor into TargetList
+    Call Sequence FindDirection
+        Call Sequence MoveElevator
+
+END SEQUENCE
+
+Sequence MoveElevator
+    If target Direction is UP 
+    Call Sequence Elevator MoveUp
+    Else target Direction is DOWN
+    Call Sequence Elevator MoveDown
+END SEQUENCE
+
+Sequence ElevatorMoveUp
+    If OpEND SEQUENCEoor is True
+        Call Sequence CloseDoor
+    Else CloseDoor is True
+        while Current Floor < Target Floor
+        Increment Current Floor by 1
+        END SEQUENCEWHILE
+    Call Sequence OpEND SEQUENCEoor
+END SEQUENCE
+
+Sequence ElevatorMoveDown
+    If OpEND SEQUENCEoor is True
+        Call Sequence CloseDoor
+    Else CloseDoor is True
+        while Current Floor > Target Floor
+        Decrement Current Floor by 1
+        END SEQUENCEWHILE
+    Call Sequence OpEND SEQUENCEoor
+
+END SEQUENCE
+
+Sequence FindDirection
+    If Current Floor - Target Floor is < 0
+    set Direction UP
+    Else If Current Floor - Target Floor is > 0
+    set Direction DOWN
+    ELse If Current Floor - Target Floor = 0
+    DO Nothing
+END SEQUENCE
+
+
+Sequence OpEND SEQUENCEoor 
+    WHILE CloseDoor is True
+    WHEN Current Floor = Target Floor
+    END SEQUENCEWHILE
+    Open Door
+END SEQUENCE
+
+Sequence CloseDoor
+    WHILE OpEND SEQUENCEoor is True
+    wait for 15 seconds
+    END SEQUENCEWHILE
+    Close Door
+END SEQUENCE
+
+
+
+
+
+
+Sequence FindElevator 
+    Look for elevator in elevatorlist
+        Call Sequence SameDirection
+            if Current Direction equals Elevator Direction and Current Floor equals Elevator Floor
+            return elevator
+            else if Current Direction equals Elevator Direction and Current Floor > Elevator Floor 
+                Call Sequence findClosestElevator
+            return elevator,floor
+            else if Current Direction equals Elevator Direction and Current Floor < Elevator Floor
+              Call Sequence findClosestElevator
+            return elevator,floor
+            else if Elevator status equals idle
+            return elevator, floor
+
+            Exit Sequence
+        END SEQUENCE
+
+
+
+
+
+Sequence findClosestElevator
+
+
+
+
+function requestElevator(floor,direction) 
+function elevatorRequest(elevator,floor)
