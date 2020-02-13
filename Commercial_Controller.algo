@@ -1,1 +1,17 @@
-T
+// This Sequence will control the movement of Elevators in a commercial building with 
+66 floors including (6 basements), four columns (with 3 Elevators each)
+
+Objects to be controlled:
+Batteries which is a pack of columns and 1 in our case
+Column is the pack of elevator, we have 4 in our commercial case.
+Cage is being reffered to as Elevator in my algorithim
+Call button,  which I have named as OutsideButton
+Doors, which are being controlled by OpenDoor and CloseDoor function
+Floor request button, which I have named as InsideButton
+Floor Display Screen which is programmed at bottom
+
+Input, Outputs, Global Variables and Functions: 
+
+InsideButton, Ousidebutton, TotalFloor, idle, Elevatorlist, StopList, TargetFloor, Status
+
+MoveUp, MoveDown, OpenDoor, CloseDoor 

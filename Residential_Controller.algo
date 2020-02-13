@@ -4,100 +4,139 @@ Objects to be controlled:
  Column is the pack of elevator, which is only 1 in our residential case.
  Cage is being reffered to as Elevator in my algorithim
  Call button,  which I have named as OutsideButton
- Doors, which are being controlled by OpEND SEQUENCEoor and CloseDoor function
+ Doors, which are being controlled by OpenDoor and CloseDoor function
  Floor request button, which I have named as InsideButton
 
 Input, Outputs and Variables: 
 
-InsideButton, Ousidebutton, TotalFloor, idle
+InsideButton, Ousidebutton, TotalFloor, idle, Elevatorlist, StopList, TargetFloor, Status
 
-MoveUp, MoveDown, OpEND SEQUENCEoor, CloseDoor 
+MoveUp, MoveDown, OpenDoor, CloseDoor 
 
 
-Sequence CallingElevator USING Direction and Floor
-    When outside Button pressed
-    Input Current Floor and required Direction (UP or DOWN)
-    Call Sequence FindElevator
+SEQUENCE CallingElevator USING Direction and Floor
+    If outside Button pressed
+    Add UserFloor to StopList
+    Call SEQUENCE ActivateOutsideButton with TargetDirection and UserFloor return ButtonStatus
+    Call SEQUENCE FindElevator with TargetDirection and UserFloor return elevator
+    Call SEQUENCE MoveElevator with TargetDirection and TargetFloor
+    End If
 END SEQUENCE 
 
-Sequence RequestingFloor
-    When inside button pressed
-    Input TargetFloor into TargetList
-    Call Sequence FindDirection
-    
-        Call Sequence MoveElevator
+SEQUENCE ActivateOutsideButton USING Direction and Floor
+
+    If the Userfloor is not equal to elevatorFloor 
+        set the Button Status to active
+        Turn ON the Button Light
+        Add TargetDirection to elevatorDirection
+        return ButtonStatus
+    End If
+
+END SEQUENCE
+
+SEQUENCE DeactivateOustideButton USING Direction and Floor
+
+    If the Userfloor equals elevatorFloor and TargetDirection equals elevatorDirection 
+        Turn OFF the Button Light
+        Set the button status to inactive
+    return ButtonStatus
+    End If
+
+END SEQUENCE
+
+SEQUENCE ArrangingStopList USING Direction and Floor
+    If the elevatorDirection is UP
+        arrange the StopList in ascending order
+    Else the elevatorDirection is DOWN
+        arrange the StopList in descending order
+    End If
 
 END SEQUENCE
 
 
-
-Sequence MoveElevator
-    If target Direction is UP 
-    Call Sequence Elevator MoveUp
-    Else target Direction is DOWN
-    Call Sequence Elevator MoveDown
+Sequence MoveElevator USING TargetDirection
+    If TargetDirection is UP then
+        Call Sequence Elevator MoveUp
+        Set Status to Moving
+    Else If TargetDirection is DOWN then
+        Call Sequence Elevator MoveDown
+        Set Status to Moving
+    Else if Set Status to Idle
+    
 END SEQUENCE
 
 Sequence ElevatorMoveUp
     If OpenDoor is True
         Call Sequence CloseDoor
     Else CloseDoor is True
-        while Current Floor < Target Floor
-        Increment Current Floor by 1
-        END SEQUENCEWHILE
-    Call Sequence OpEND SEQUENCEoor
+        while UserFloor < TargetFloor
+        Increment User Floor by 1
+        END SEQUENCE WHILE
+    Call Sequence OpenDoor
+    Call SEQUENCE DeactivateInsideButton
+    Remove TargetFloor from StopList
+    If StopList Length is greater than 1 then
+        set Status to Moving
+    Else StopList Length is 0 then
+        set Status to Idle
 END SEQUENCE
 
 Sequence ElevatorMoveDown
     If OpenDoor is True
         Call Sequence CloseDoor
     Else CloseDoor is True
-        while Current Floor > Target Floor
-        Decrement Current Floor by 1
-        END SEQUENCEWHILE
-    Call Sequence OpEND SEQUENCEoor
+        while UserFloor > TargetFloor
+        Decrement User Floor by 1
+        END SEQUENCE WHILE
+    Call Sequence OpenDoor
+    Call SEQUENCE DeactivateInsideButton
+    Remove TargetFloor from StopList
+        If StopList Length is greater than 1 then
+        set Status to Moving
+    Else StopList Length is 0 then
+        set Status to Idle
 
 END SEQUENCE
 
-Sequence FindDirection
-    If Current Floor - Target Floor is < 0
+Sequence FindDirection USING Floor and Direction
+    If UserFloor - TargetFloor is < 0
     set Direction UP
-    Else If Current Floor - Target Floor is > 0
+    Else If UserFloor - TargetFloor is > 0
     set Direction DOWN
-    ELse If Current Floor - Target Floor = 0
+    ELse If UserFloor - TargetFloor = 0
     DO Nothing
 END SEQUENCE
 
 
-Sequence OpEND SEQUENCEoor 
+Sequence OpenDoor 
     WHILE CloseDoor is True
-    WHEN Current Floor = Target Floor
+    If UserFloor equals TargetFloor
     END SEQUENCEWHILE
     Open Door
+
 END SEQUENCE
 
 Sequence CloseDoor
-    WHILE OpEND SEQUENCEoor is True
+    WHILE OpenDoor is True
     wait for 15 seconds
+    If there is no obstruction
     END SEQUENCEWHILE
     Close Door
+    
 END SEQUENCE
 
 
 
-
-
-
-Sequence FindElevator USING Cuurent Direction and Current Floor
+Sequence FindElevator USING UserDirection and UserFloor
     Look for elevator in Elevatorlist
-            if Current Direction equals Elevator Direction and Current Floor equals Elevator Floor and elevator is Stopped
+            if UserDirection equals elevatorDirection and UserFloor equals elevatorFloor and elevator is Stopped
             return elevator
-            else if Current Direction equals Elevator Direction and Current Floor equals Elevator Floor and elevator is Idle
+            else if UserDirection equals elevatorDirection and UserFloor equals elevatorFloor and elevator is Idle
             return elevator
-            else if Current Direction equals Elevator Direction and Current Floor > Elevator Floor and elevator is Moving or Stopped
+            else if UserDirection equals elevatorDirection and UserFloor > elevatorFloor and elevator is Moving or Stopped
                 Call Sequence findClosestElevator, then return ClosestElevator
             return elevator
-            else if Current Direction equals Elevator Direction and Current Floor < Elevator Floor and elevator is Moving or Stopped
+            else if UserDirection equals elevatorDirection and UserFloor < elevatorFloor and elevator is Moving or Stopped
               Call Sequence findClosestElevator, then return ClosestElevator
             return elevator
             else if elevator status equals idle
@@ -109,11 +148,9 @@ END SEQUENCE
 
 
 
-
-
 Sequence findClosestElevator
     Look for elevator in Elevatorlist
-        Compute the difference between Current Floor and Elevator Floor, then set it as closeness
+        Compute the difference between UserFloor and elevatorFloor, then set it as closeness
         Compare that to difference of next elevator in Elevatorlist
         if difference of next elevator < closeness
         set differenceof next elevator to be closeness
@@ -122,8 +159,30 @@ END SEQUENCE
 
 
 
+SEQUENCE RequestingFloor
+    When inside button pressed
+    Add TargetFloor into StopList
+    Call Sequence FindDirection
+    Call SEQUENCE ActivateInsideButton
+    Call Sequence MoveElevator
+
+END SEQUENCE
 
 
+SEQUENCE ActivateInsideButton USING Direction and Floor
+
+    If the Userfloor does not equal elevatorFloor and UserDirection equals elevatorDirection 
+        Turn ON the Button Light
+        then return ButtonStatus
+END SEQUENCE
+
+SEQUENCE DeactivateInsideButton USING Direction and Floor
+
+    If the Userfloor equals elevatorFloor and UserDirection equals elevatorDirection 
+        Turn OFF the Button Light
+        then return ButtonStatus
+
+END SEQUENCE
 
 
 function requestElevator(floor,direction) 
