@@ -14,19 +14,22 @@ InsideButton, Ousidebutton, TotalFloor, idle
 MoveUp, MoveDown, OpEND SEQUENCEoor, CloseDoor 
 
 
-Sequence press OutsideButton
-    When Outside Button pressed
+Sequence CallingElevator USING Direction and Floor
+    When outside Button pressed
     Input Current Floor and required Direction (UP or DOWN)
     Call Sequence FindElevator
-END SEQUENCE Sequence
+END SEQUENCE 
 
-Sequence press InsideButton
+Sequence RequestingFloor
     When inside button pressed
-    Input Target Floor into TargetList
+    Input TargetFloor into TargetList
     Call Sequence FindDirection
+    
         Call Sequence MoveElevator
 
 END SEQUENCE
+
+
 
 Sequence MoveElevator
     If target Direction is UP 
@@ -36,7 +39,7 @@ Sequence MoveElevator
 END SEQUENCE
 
 Sequence ElevatorMoveUp
-    If OpEND SEQUENCEoor is True
+    If OpenDoor is True
         Call Sequence CloseDoor
     Else CloseDoor is True
         while Current Floor < Target Floor
@@ -46,7 +49,7 @@ Sequence ElevatorMoveUp
 END SEQUENCE
 
 Sequence ElevatorMoveDown
-    If OpEND SEQUENCEoor is True
+    If OpenDoor is True
         Call Sequence CloseDoor
     Else CloseDoor is True
         while Current Floor > Target Floor
@@ -85,28 +88,40 @@ END SEQUENCE
 
 
 
-Sequence FindElevator 
-    Look for elevator in elevatorlist
-        Call Sequence SameDirection
-            if Current Direction equals Elevator Direction and Current Floor equals Elevator Floor
+Sequence FindElevator USING Cuurent Direction and Current Floor
+    Look for elevator in Elevatorlist
+            if Current Direction equals Elevator Direction and Current Floor equals Elevator Floor and elevator is Stopped
             return elevator
-            else if Current Direction equals Elevator Direction and Current Floor > Elevator Floor 
-                Call Sequence findClosestElevator
-            return elevator,floor
-            else if Current Direction equals Elevator Direction and Current Floor < Elevator Floor
-              Call Sequence findClosestElevator
-            return elevator,floor
-            else if Elevator status equals idle
-            return elevator, floor
+            else if Current Direction equals Elevator Direction and Current Floor equals Elevator Floor and elevator is Idle
+            return elevator
+            else if Current Direction equals Elevator Direction and Current Floor > Elevator Floor and elevator is Moving or Stopped
+                Call Sequence findClosestElevator, then return ClosestElevator
+            return elevator
+            else if Current Direction equals Elevator Direction and Current Floor < Elevator Floor and elevator is Moving or Stopped
+              Call Sequence findClosestElevator, then return ClosestElevator
+            return elevator
+            else if elevator status equals idle
+                Call Sequence findClosestElevator, then return ClosestElevator
+            return elevator
 
-            Exit Sequence
-        END SEQUENCE
+            
+END SEQUENCE
 
 
 
 
 
 Sequence findClosestElevator
+    Look for elevator in Elevatorlist
+        Compute the difference between Current Floor and Elevator Floor, then set it as closeness
+        Compare that to difference of next elevator in Elevatorlist
+        if difference of next elevator < closeness
+        set differenceof next elevator to be closeness
+        return ClosestElevator with the closeness
+END SEQUENCE
+
+
+
 
 
 
