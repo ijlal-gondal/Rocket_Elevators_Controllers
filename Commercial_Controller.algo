@@ -15,3 +15,203 @@ Input, Outputs, Global Variables and Functions:
 InsideButton, Ousidebutton, TotalFloor, idle, Elevatorlist, StopList, TargetFloor, Status
 
 MoveUp, MoveDown, OpenDoor, CloseDoor 
+
+SEQUENCE CallingElevator USING Direction and Floor
+    If outside Button pressed
+    Set UserFloor as 1
+    Add TargetFloor to StopList
+    Call SEQUENCE FindDirection USING UserFloor and TargetFloor return UserDirection
+    Call SEQUENCE ActivateOutsideButton with TargetDirection and TargetFloor return ButtonStatus
+    Call SEQUENCE ColumnSelector USING TargetFloor
+    Call SEQUENCE FindElevator with TargetDirection, TargetFloor and UserDirection return elevator
+    Call SEQUENCE MoveElevator with TargetDirection and TargetFloor
+    End If
+END SEQUENCE 
+
+SEQUENCE ColumnSelector USING Floor
+    If TargetFloor is less than Ground Floor then 
+        Activate Column A
+    Else If TargetFloor is greater than Ground Floor but is equal to or less than 20
+        Activate Column B
+    Else If TargetFloor is greater than 20 but is equal to or less than 40
+        Activate Column C
+    Else If TargetFloor is greater than 40 but is equal to or less than 60
+        Activate Column D
+
+END SEQUENCE
+
+SEQUENCE ActivateOutsideButton USING Dire Floor
+
+    If the Userfloor is not equal to elevatorFloor 
+        set the Button Status to active
+        Turn ON the Button Light
+        return ButtonStatus
+    End If
+
+END SEQUENCE
+
+SEQUENCE DeactivateOustideButton USING Floor
+
+    If the Userfloor equals elevatorFloor 
+        Turn OFF the Button Light
+        Set the button status to inactive
+    return ButtonStatus
+    End If
+
+END SEQUENCE
+
+SEQUENCE ArrangingStopList USING Direction and Floor
+    If the elevatorDirection is UP
+        arrange the StopList in ascending order
+    Else the elevatorDirection is DOWN
+        arrange the StopList in descending order
+    End If
+
+END SEQUENCE
+
+
+Sequence MoveElevator USING TargetDirection
+    If TargetDirection is UP then
+        Call Sequence Elevator MoveUp
+        Set Status to Moving
+    Else If TargetDirection is DOWN then
+        Call Sequence Elevator MoveDown
+        Set Status to Moving
+    Else if Set Status to Idle
+    
+END SEQUENCE
+
+Sequence ElevatorMoveUp
+    If OpenDoor is True
+        Call Sequence CloseDoor
+    Else CloseDoor is True
+        while UserFloor < TargetFloor
+        Increment User Floor by 1
+        END SEQUENCE WHILE
+    Call Sequence OpenDoor
+    Call SEQUENCE DeactivateInsideButton
+    Remove TargetFloor from StopList
+    If StopList Length is greater than 1 then
+        set Status to Moving
+    Else StopList Length is 0 then
+        set Status to Idle
+END SEQUENCE
+
+Sequence ElevatorMoveDown
+    If OpenDoor is True
+        Call Sequence CloseDoor
+    Else CloseDoor is True
+        while UserFloor > TargetFloor
+        Decrement User Floor by 1
+        END SEQUENCE WHILE
+    Call Sequence OpenDoor
+    Call SEQUENCE DeactivateInsideButton
+    Remove TargetFloor from StopList
+        If StopList Length is greater than 1 then
+        set Status to Moving
+    Else StopList Length is 0 then
+        set Status to Idle
+
+END SEQUENCE
+
+Sequence FindDirection USING UserFloor and TargetFloor
+    If UserFloor - TargetFloor is < 0
+    set Direction UP
+    Else If UserFloor - TargetFloor is > 0
+    set Direction DOWN
+    ELse If UserFloor - TargetFloor = 0
+    DO Nothing
+END SEQUENCE
+
+
+Sequence OpenDoor 
+    WHILE CloseDoor is True
+    If UserFloor equals TargetFloor
+    END SEQUENCEWHILE
+    Open Door
+
+END SEQUENCE
+
+Sequence CloseDoor
+    WHILE OpenDoor is True
+    wait for 15 seconds
+    If there is no obstruction
+    END SEQUENCEWHILE
+    Close Door
+    
+END SEQUENCE
+
+
+
+Sequence FindElevator USING UserFloor and TargetColumn and UserDirection
+    for elevator in Elevatorlist
+            if UserFloor equals elevatorFloor and TargetColumn equals elevatorColumn and elevator is Stopped
+            return elevator
+            else if UseFloor equals elevatorFloor and TargetColumn equals elevatorColumn and elevator is Idle
+            return elevator
+            else if TargetColumn equals elevatorColumn and UserFloor is not equal to elevatorFloor and 
+            UserDirection is not equal to elevator Direction and elevator is Moving or Stopped
+                Call Sequence findClosestElevator, then return ClosestElevator
+            return elevator
+            else if TargetColumn equals elevatorColumn and UserFloor is not equal to elevatorFloor and 
+            UserDirection is equal to elevator Direction and elevator is Moving or Stopped
+              Call Sequence findClosestElevator, then return ClosestElevator
+            return elevator
+            else if elevator status equals idle
+                Call Sequence findClosestElevator, then return ClosestElevator
+            return elevator
+
+            
+END SEQUENCE
+
+Sequence FindElevatorforGround USING UserFloor and TargetColumn and UserDirection
+    for elevator in Elevatorlist
+            if UserFloor equals elevatorFloor and TargetColumn equals elevatorColumn and elevator is Stopped
+            return elevator
+            else if UseFloor equals elevatorFloor and TargetColumn equals elevatorColumn and elevator is Idle
+            return elevator
+            else if TargetColumn equals elevatorColumn and UserFloor is not equal to elevatorFloor and 
+            UserDirection is equal to elevator Direction and elevator is Moving or Stopped
+                Call Sequence findClosestElevator, then return ClosestElevator
+            return elevator
+            else if TargetColumn equals elevatorColumn and UserFloor is not equal to elevatorFloor and 
+            UserDirection is not equal to elevator Direction and elevator is Moving or Stopped
+              Call Sequence findClosestElevator, then return ClosestElevator
+            return elevator
+            else if elevator status equals idle
+                Call Sequence findClosestElevator, then return ClosestElevator
+            return elevator
+
+            
+END SEQUENCE
+
+Sequence findClosestElevator
+    Look for elevator in Elevatorlist
+        Compute the difference between UserFloor and elevatorFloor, then set it as closeness
+        Compare that to difference of next elevator in Elevatorlist
+        if difference of next elevator < closeness
+        set differenceof next elevator to be closeness
+        return ClosestElevator with the closeness
+END SEQUENCE
+
+
+
+SEQUENCE RequestingGroundFloor
+    If Ousidebutton is pressed
+        UserFloor is set as CurrentFloor
+        TargetFloor is 1
+        Call Sequence FindDirection
+        Call SEQUENCE ActivateOutsideButton
+        Call SEQUENCE FindElevatorforGround
+        Call Sequence MoveElevator
+
+END SEQUENCE
+
+
+
+
+SEQUENCE FloorDisplay
+    Print elevatorFloor on Screen
+
+END SEQUENCE
+

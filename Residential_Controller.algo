@@ -128,7 +128,7 @@ END SEQUENCE
 
 
 Sequence FindElevator USING UserDirection and UserFloor
-    Look for elevator in Elevatorlist
+     for elevator in Elevatorlist
             if UserDirection equals elevatorDirection and UserFloor equals elevatorFloor and elevator is Stopped
             return elevator
             else if UserDirection equals elevatorDirection and UserFloor equals elevatorFloor and elevator is Idle
@@ -183,6 +183,8 @@ SEQUENCE DeactivateInsideButton USING Direction and Floor
         then return ButtonStatus
 
 END SEQUENCE
+
+
 
 
 function requestElevator(floor,direction) 
