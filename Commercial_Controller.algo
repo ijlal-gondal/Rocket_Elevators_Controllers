@@ -5,9 +5,9 @@ Objects to be controlled:
 Batteries which is a pack of columns and 1 in our case
 Column is the pack of elevator, we have 4 in our commercial case.
 Cage is being reffered to as Elevator in my algorithim
-Call button,  which I have named as OutsideButton
+Call button,  which I have named as OutsideGroundButton
 Doors, which are being controlled by OpenDoor and CloseDoor function
-Floor request button, which I have named as InsideButton
+Floor request button, which I have named as OutsideFloorButton
 Floor Display Screen which is programmed at bottom
 
 Input, Outputs, Global Variables and Functions: 
@@ -21,10 +21,11 @@ SEQUENCE CallingElevator USING Direction and Floor
     Set UserFloor as 1
     Add TargetFloor to StopList
     Call SEQUENCE FindDirection USING UserFloor and TargetFloor return UserDirection
-    Call SEQUENCE ActivateOutsideButton with TargetDirection and TargetFloor return ButtonStatus
+    Call SEQUENCE ActivateOutsideGroundButton with TargetFloor return ButtonStatus
     Call SEQUENCE ColumnSelector USING TargetFloor
     Call SEQUENCE FindElevator with TargetDirection, TargetFloor and UserDirection return elevator
     Call SEQUENCE MoveElevator with TargetDirection and TargetFloor
+    Call SEQUENCE DectivateOutsideGroundButton with TargetFloor return ButtonStatus
     End If
 END SEQUENCE 
 
@@ -40,7 +41,7 @@ SEQUENCE ColumnSelector USING Floor
 
 END SEQUENCE
 
-SEQUENCE ActivateOutsideButton USING Dire Floor
+SEQUENCE ActivateOutsideGroundButton USING Floor
 
     If the Userfloor is not equal to elevatorFloor 
         set the Button Status to active
@@ -50,7 +51,7 @@ SEQUENCE ActivateOutsideButton USING Dire Floor
 
 END SEQUENCE
 
-SEQUENCE DeactivateOustideButton USING Floor
+SEQUENCE DeactivateOustideGroundButton USING Floor
 
     If the Userfloor equals elevatorFloor 
         Turn OFF the Button Light
@@ -89,7 +90,7 @@ Sequence ElevatorMoveUp
         Increment User Floor by 1
         END SEQUENCE WHILE
     Call Sequence OpenDoor
-    Call SEQUENCE DeactivateInsideButton
+
     Remove TargetFloor from StopList
     If StopList Length is greater than 1 then
         set Status to Moving
@@ -105,7 +106,6 @@ Sequence ElevatorMoveDown
         Decrement User Floor by 1
         END SEQUENCE WHILE
     Call Sequence OpenDoor
-    Call SEQUENCE DeactivateInsideButton
     Remove TargetFloor from StopList
         If StopList Length is greater than 1 then
         set Status to Moving
@@ -197,21 +197,41 @@ END SEQUENCE
 
 
 SEQUENCE RequestingGroundFloor
-    If Ousidebutton is pressed
+    If OusideFloorButton is pressed
         UserFloor is set as CurrentFloor
         TargetFloor is 1
         Call Sequence FindDirection
         Call SEQUENCE ActivateOutsideButton
         Call SEQUENCE FindElevatorforGround
         Call Sequence MoveElevator
+        Call SEQUENCE DeactivateOutsideFloorButton
 
 END SEQUENCE
 
 
+SEQUENCE ActivateOutsideFloorButton USING Floor
 
+    If the Userfloor is not equal to elevatorFloor 
+        set the Button Status to active
+        Turn ON the Button Light
+        return ButtonStatus
+    End If
+
+END SEQUENCE
+
+SEQUENCE DeactivateOustideFloorButton USING Floor
+
+    If the Userfloor equals elevatorFloor 
+        Turn OFF the Button Light
+        Set the button status to inactive
+    return ButtonStatus
+    End If
+
+END SEQUENCE
 
 SEQUENCE FloorDisplay
     Print elevatorFloor on Screen
 
 END SEQUENCE
 
+ 
