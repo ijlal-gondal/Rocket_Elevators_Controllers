@@ -2,9 +2,13 @@
 
 Objects to be controlled:
  Column is the pack of elevator, which is only 1 in our residential case.
+
  Cage is being reffered to as Elevator in my algorithim
+
  Call button,  which I have named as OutsideButton
+
  Doors, which are being controlled by OpenDoor and CloseDoor function
+ 
  Floor request button, which I have named as InsideButton
 
 Input, Outputs and Variables: 
@@ -15,7 +19,7 @@ MoveUp, MoveDown, OpenDoor, CloseDoor
 
 
 SEQUENCE CallingElevator USING Direction and Floor
-    If outside Button pressed
+    If OutsideButton pressed
     Add UserFloor to StopList
     Call SEQUENCE ActivateOutsideButton with TargetDirection and UserFloor return ButtonStatus
     Call SEQUENCE FindElevator with TargetDirection and UserFloor return elevator
