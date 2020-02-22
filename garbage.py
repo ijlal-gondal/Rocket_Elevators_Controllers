@@ -93,3 +93,14 @@
 
     # best_elevator_scenario_2 = controller.requestFloor(best_elevator_scenario_2, userRequestFloor)
     # print("The found elevator is at floor " + str(best_elevator_scenario_2.floor))
+
+
+  # def requestElevator(self,floor,direction):
+  #   best_elevator = self.requestElevator(direction, floor)
+  #   self.move(best_elevator, floor)
+  #   return best_elevator
+
+        # self.columnList[0].CallButtonList.append(floor)
+      # print("request stop list", self.columnList[0].CallButtonList)
+
+            #return self.requestFloor(elevator,floor)
