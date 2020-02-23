@@ -6,14 +6,14 @@ class Column {
         this.floorTotal = [];
         this.CallButtonList = [];
 
-        for (let i = 0; i < floorTotal; i++) {
+        for (let i = 1; i < floorTotal+1; i++) {
             this.floorTotal.push(i);
             console.log(this.floorTotal);
         }
 
-        for (let i = 0; i < elevatorTotal; i++) {
+        for (let i = 1; i < elevatorTotal+1; i++) {
             this.elevatorList.push(new Elevator(i, 1))
-            console.log(this.elevatorList.length)
+            console.log(this.elevatorList)
         }
 
 
@@ -26,78 +26,64 @@ class Controller {
         this.columnList = [];
         for (let i = 0; i < numberOfColumns; i++) {
             this.columnList.push(new Column(floorTotal, elevatorPerColumn))
-            console.log("text", this.columnList[i].elevatorList)
+            // console.log("elevatorList", this.columnList[i].elevatorList)
 
-            //  requestElevator(this,floor,direction):
-            //   best_elevator = this.requestElevator(direction, floor)
-            //   this.move(best_elevator, floor)
-            //   return best_elevator
         }
     }
     requestElevator(direction, floor) {
-        console.log("test input", direction, floor)
-        // this.columnList[0].findElevator.push(floor)
-        // console.log("request stop list", this.columnList[0].CallButtonList)
+        // console.log("test input", direction, floor)
         let elevator = this.findElevator(direction, floor)
         elevator.floorRequestList.push(floor)
         this.move(elevator, floor)
         console.log("request gives us an elevator : ", elevator)
         return elevator
-        //return this.requestFloor(elevator,floor)
+   
     }
     findElevator(direction, floor) {
 
         console.log("FIND ELEVATOR")
-        let elevatorSubList = []
+        console.log('request direction:', direction)
+        console.log('request floor: ', floor)
+        let elevatorSubList = [];
         this.columnList[0].elevatorList.forEach(function(elevator) {
 
-
-            console.log(elevator.ID);
-            console.log(elevator.floor);
-            console.log(elevator.direction);
-
-            console.log('direction', direction);
-            console.log('floor', floor);
+            console.log("elevaror ID", elevator.ID);
             console.log('elevator floor', elevator.floor);
             console.log('elevator direction', elevator.direction);
 
             if (floor == elevator.floor && elevator.direction == "IDLE") {
-                console.log("11");
+                // console.log("case 1");
                 elevatorSubList.push(elevator);
 
             }
             else if ((direction == "UP" || direction == "DOWN") && elevator.direction != "IDLE") {
-                console.log("12");
+                // console.log("case 2");
                 if (direction == "UP" && floor > elevator.floor) {
-                    console.log("12.4");
+                    // console.log("case 2.1");
                     elevatorSubList.push(elevator);
-                  //  var elevator = this.findClosestElevator(elevatorSubList, floor);
-                  //  return elevator
 
                 }
 
                 else if (direction == "DOWN" && floor < elevator.floor) {
-                    console.log("12.99");
+                    // console.log("case 2.2");
                     elevatorSubList.push(elevator);
-                    var elevator = this.findClosestElevator(elevatorSubList, floor);
-                    return elevator
+
 
                 }
             }
 
             else if (elevator.direction == "IDLE" && floor != elevator.floor) {
-                console.log("13", elevator.ID);
+                // console.log("case 3");
                 elevatorSubList.push(elevator);
-              //  var elevator = this.findClosestElevator(elevatorSubList, floor);
-              //  return elevator
 
-                console.log("test ELEVATOR", elevatorSubList.length);
+
+                // console.log("ELEVATOR list status", elevatorSubList.length);
 
             }
             console.log("Found ELEVATOR", elevatorSubList);
-
-            // return this.findClosestElevator(elevatorSubList, floor);
         });
+           return this.findClosestElevator(elevatorSubList, floor);
+
     }
 
 
@@ -105,22 +91,23 @@ class Controller {
     findClosestElevator(elevatorSubList, floor) {
         let closestElevator = elevatorSubList[0];
         let closeness = 10;
-
-        this.elevatorSubList.forEach(function (elevator) {
-            //   console.log('fllllllllllopooor',floor)
-            //   console.log('ellllllllllllllll',elevator.floor)
+        // console.log('elevatorSubList[0]',elevatorSubList);
+        elevatorSubList.forEach(function(elevator) {
+              console.log('Math status',floor);
+              console.log('Math status 2',elevator.floor);
             if (Math.abs(floor - elevator.floor) < closeness) {
                 closeness = Math.abs(floor - elevator.floor);
                 closestElevator = elevator;
             }
         });
         return closestElevator
+
     }
 
     requestFloor(elevator, floor) {
         elevator.floorRequestList.push(floor)
 
-        console.log("elevator", elevator.floorRequestList)
+        console.log("requested floor from inside", elevator.floorRequestList)
         this.move(elevator, floor)
 
         return elevator
@@ -132,26 +119,27 @@ class Controller {
             // elevator.direction = "UP"
             if (elevator.floor < elevator.floorRequestList[0]) {
                 while (elevator.floor < elevator.floorRequestList[0]) {
-                    elevator.floor += 1;
-                    console.log("lemon", elevator.floor)
-                    this.door(elevator)
-                    console.log("elevatorfloorlist", elevator.floorRequestList)
-                    elevator.floorRequestList.pop(0)
-                    console.log("elevatorfloorlist 2", elevator.floorRequestList)
+                    elevator.floor ++;
+                    console.log("current floor: ", elevator.floor)
                 }
+                    this.door(elevator)
+                    // console.log("elevatorfloorlist status", elevator.floorRequestList)
+                    elevator.floorRequestList.pop(0)
+                    // console.log("elevatorfloorlist status", elevator.floorRequestList)
+                
             }
             // elevator.direction is "DOWN"
             else if (elevator.floor > elevator.floorRequestList[0]) {
                 while (elevator.floor > elevator.floorRequestList[0]) {
-                    elevator.floor -= 1
-                    console.log("watermelon", elevator.floor);
-                    this.door(elevator);
-                    console.log("elevatorfloorlist", elevator.floorRequestList);
-                    elevator.floorRequestList.pop(0);
-                    console.log("elevatorfloorlist 2", elevator.floorRequestList);
-                    // else:
-                    //   console.log("Tomato")
+                    elevator.floor --;
+                    console.log("current floor: ", elevator.floor);
                 }
+                    this.door(elevator);
+                    // console.log("elevatorfloorlist status", elevator.floorRequestList);
+                    elevator.floorRequestList.pop(0);
+                    // console.log("elevatorfloorlist status", elevator.floorRequestList);
+
+                
             }
         }
     }
@@ -160,7 +148,7 @@ class Controller {
         if (elevator.floor == elevator.floorRequestList[0]) {
             elevator.door = "OPEN";
             console.log(elevator.door);
-            time.sleep(5);
+            // time.sleep(5);
             elevator.door = "CLOSE";
             console.log(elevator.door);
 
@@ -204,70 +192,16 @@ function main() {
     userRequestFloor = 7
     best_elevator_scenario_1 = controller.requestElevator(userDirection, userPosition)
 
-    console.log("The found elevator for scenario 1 is " + str(best_elevator_scenario_1.ID))
+    console.log("The found elevator for scenario 1 is " + (best_elevator_scenario_1.ID))
     best_elevator_scenario_11 = controller.requestFloor(best_elevator_scenario_1, userRequestFloor)
 
-    console.log("The found elevator is moving to " + str(best_elevator_scenario_11.floor))
+    console.log("The found elevator is at " + (best_elevator_scenario_11.floor))
 
 
 
+    // Scenario 2
 
-
-
-    // Scenario 2 
-
-
-    // let controller = new Controller(1, 10, 2);
-
-    // column_test_case_3 = controller.columnList[0];
-
-    // column_test_case_3.elevatorList[0].floor = 10;
-    // column_test_case_3.elevatorList[0].direction = "IDLE";
-
-
-
-    // column_test_case_3.elevatorList[1].floor = 3;
-    // column_test_case_3.elevatorList[1].direction = "UP";
-    // column_test_case_3.elevatorList[1].floorRequestList.push(6);
-
-
-    // let userPosition = 3
-    // let userDirection = 'DOWN'
-    // let userRequestFloor = 2
-
-    // best_elevator_scenario_3 = controller.requestElevator(userDirection, userPosition);
-    // console.log("The best elevator for scenario 3 is " + str(best_elevator_scenario_3.ID));
-
-    // best_elevator_scenario_3 = controller.requestFloor(best_elevator_scenario_3, userRequestFloor);
-    // console.log("The found elevator is at floor " + str(best_elevator_scenario_3.floor));
-
-
-
-    // let userPosition = 10
-    // let userDirection = 'DOWN'
-    // let userRequestFloor = 3
-
-
-    // best_elevator_scenario_3 = controller.requestElevator(userDirection, userPosition)
-    // console.log("The found elevator for scenario 3 is " + str(best_elevator_scenario_3.ID))
-
-    // best_elevator_scenario_3 = controller.requestFloor(best_elevator_scenario_3, userRequestFloor)
-    // console.log("The found elevator is at floor " + str(best_elevator_scenario_3.floor))
-
-    // userPosition = 9
-    // userDirection = 'DOWN'
-    // userRequestFloor = 2
-
-    // best_elevator_scenario_2 = controller.requestElevator(userDirection, userPosition)
-    // console.log("The best found elevator for scenario 2 is " + str(best_elevator_scenario_2.ID))
-
-    // best_elevator_scenario_2 = controller.requestFloor(best_elevator_scenario_2, userRequestFloor)
-    // console.log("The found elevator is at floor " + str(best_elevator_scenario_2.floor))
-
-
-    // // Scenario 3
-
-    // controller = Controller(1, 10, 2)
+    // controller = new Controller(1, 10, 2)
 
     // column_test_case_2 = controller.columnList[0]
 
@@ -285,10 +219,10 @@ function main() {
     // userRequestFloor = 6
 
     // best_elevator_scenario_2 = controller.requestElevator(userDirection, userPosition)
-    // console.log("The best elevator for scenario 2 is " + str(best_elevator_scenario_2.ID))
+    // console.log("The best elevator for scenario 2 is " + (best_elevator_scenario_2.ID))
 
     // best_elevator_scenario_2 = controller.requestFloor(best_elevator_scenario_2, userRequestFloor)
-    // console.log("The found elevator is at floor " + str(best_elevator_scenario_2.floor))
+    // console.log("The found elevator is at floor " + (best_elevator_scenario_2.floor))
 
 
 
@@ -298,103 +232,65 @@ function main() {
 
 
     // best_elevator_scenario_2 = controller.requestElevator(userDirection, userPosition)
-    // console.log("The found elevator for scenario 2 is " + str(best_elevator_scenario_2.ID))
+    // console.log("The found elevator for scenario 2 is " + (best_elevator_scenario_2.ID))
 
     // best_elevator_scenario_2 = controller.requestFloor(best_elevator_scenario_2, userRequestFloor)
-    // console.log("The found elevator is at floor " + str(best_elevator_scenario_2.floor))
+    // console.log("The found elevator is at floor " + (best_elevator_scenario_2.floor))
 
     // userPosition = 9
     // userDirection = 'DOWN'
     // userRequestFloor = 2
 
     // best_elevator_scenario_2 = controller.requestElevator(userDirection, userPosition)
-    // console.log("The best found elevator for scenario 2 is " + str(best_elevator_scenario_2.ID))
+    // console.log("The best found elevator for scenario 2 is " + (best_elevator_scenario_2.ID))
 
     // best_elevator_scenario_2 = controller.requestFloor(best_elevator_scenario_2, userRequestFloor)
-    // console.log("The found elevator is at floor " + str(best_elevator_scenario_2.floor))
+    // console.log("The found elevator is at floor " + (best_elevator_scenario_2.floor))
 
 
-    // if len(elevatorSubList) == 0:
-    //     elevatorSubList.push(this.columnList[0].elevatorList[0])
-
-    // best_elevator_scenario_1 = column_test_case_1.requestElevator(userPosition, userDirection)
-    // console.log("SECOND ELEVATOR ID " + str(column_test_case_1.elevatorList[1].ID))
-    // console.log("FIRST ELEVATOR ID " + str(column_test_case_1.elevatorList[0].ID))
-    // console.log('test1', column_test_case_1.elevatorList[0].ID)
-    // findElevator('UP', column_test_case_1.elevatorList, 5)
-
-    // best_elevator = column_test_case_1.findCallButton("UP", 2)
-    // console.log("BEST ELEVATOR ID " + str(best_elevator.ID))
-
-    // column_test_case_1.findElevator("up",4)
-    // column_test_case_1.elevatorList[0].currentFloor = 1
-
-    // column_test_case_1.elevatorList[1].currentFloor = 1
+    // // Scenario 3 
 
 
-    // call_button = column_test_case_1.findCallButton(10,2)
+    // let controller = new Controller(1, 10, 2);
+
+    // column_test_case_3 = controller.columnList[0];
+
+    // column_test_case_3.elevatorList[0].floor = 10;
+    // column_test_case_3.elevatorList[0].direction = "IDLE";
 
 
-    // column_test_case_1.requestElevator(1, 'Up')
+
+    // column_test_case_3.elevatorList[1].floor = 3;
+    // column_test_case_3.elevatorList[1].direction = "UP";
+    // controller.move(column_test_case_3.elevatorList[1], 6)
 
 
-    // best_elevator = call_button.findElevator(1,"Up")
+    // let userPosition = 3
+    // let userDirection = 'DOWN'
+    // let userRequestFloor = 2
 
-    //  callButton = CallButton()
+    // best_elevator_scenario_3 = controller.requestElevator(userDirection, userPosition);
+    // console.log("The best elevator for scenario 3 is " + (best_elevator_scenario_3.ID));
 
-    // else if floor != elevator.floor:
-    //   elevator.door == "CLOSE"
-    // callButton = CallButton(this.direction, this.floor)
+    // best_elevator_scenario_3 = controller.requestFloor(best_elevator_scenario_3, userRequestFloor);
+    // console.log("The found elevator is at floor " + (best_elevator_scenario_3.floor));
 
-    // elevator = this.findElevator(direction,floor)
-    // elevator.floorRequestList.push(floor)
-    // elevator.move
 
-    // controller1 = Controller(2,10)
 
-    // // elevator = this.setDirection(direction, elevator)
-    //    setDirection(this, direction, elevator):
+    // userPosition = 10
+    // userDirection = 'DOWN'
+    // userRequestFloor = 3
 
-    // if direction == "UP":
-    //   elevator.direction = "UP"
-    // else if direction == "DOWN":
-    //   elevator.direction == "DOWN"
+    // column_test_case_3.elevatorList[1].floor = 6
+    // column_test_case_3.elevatorList[1].direction = "IDLE"
 
-    // if this.direction == (UP or DOWN or Up or Down) and this.floor <= column.floorTotal
-    // elevator = Elevator.CallButtonRequestList.push(direction,floor)
-    // console.log(floor,direction)
+    // best_elevator_scenario_3 = controller.requestElevator(userDirection, userPosition)
+    // console.log("The found elevator for scenario 3 is " + (best_elevator_scenario_3.ID))
 
-    // elevator = Elevator(1,2)
-    // controller = Controller(2,10)
-    // controller.move(callButton.direction,elevator.ID)
+    // best_elevator_scenario_3 = controller.requestFloor(best_elevator_scenario_3, userRequestFloor)
+    // console.log("The found elevator is at floor " + (best_elevator_scenario_3.floor))
 
-    //  CallingElevator(direction, floor):
-    //     if CallButton == "Pressed":
-    //         this.StopList.push(User.floor,User.direction)
-    //     ActivateCallButton()
-    //     FindElevator()
-    //  status(this, elevator, floor):
 
-    //   if len(elevator.floorRequestList) != [] and floor != elevator.floor:
-    //     elevator.status = "MOVING"
-    //   else if len(elevator.CallButtonRequestList) != [] and floor != elevator.floor:
-    //     elevator.status = "MOVING"
-    //   else if len(elevator.floorRequestList) != [] and floor == elevator.floor:
-    //     elevator.status = "STOPPED"
-    //   else if len(elevator.CallButtonRequestList) != [] and floor == elevator.floor:
-    //     elevator.status = "STOPPED"
-    //   else if len(elevator.floorRequestList) == [] and len(elevator.CallButtonRequestList) == []:
-    //     elevator.status = "IDLE"
-
-    //     return elevator
-
-    // if direction == elevator.direction and floor == elevator.floor and elevator.status == "STOPPED":
-    // return elevator
-    //  FindElevator(direction, floor):
-
-    // console.log("elevator: ", elevator)
-    // console.log("Moving :", direction)
-    // return ElevatorNumber
 
 
 

@@ -7,11 +7,11 @@ class Column():
     self.floorTotal = []
     self.CallButtonList = []
 
-    for i in range(1, floorTotal):
+    for i in range(1, floorTotal+1):
         self.floorTotal.append(i)
     print("Floor list: ", self.floorTotal)  
 
-    for i in range(1, elevatorTotal):
+    for i in range(1, elevatorTotal+1):
         self.elevatorList.append(Elevator(i, 1))
     print("Total number of elevators:", len(self.elevatorList))
 
@@ -130,8 +130,7 @@ class Controller():
         # print("elevatorfloorlist status", elevator.floorRequestList)
         elevator.floorRequestList.pop(0)
         # print("elevatorfloorlist status", elevator.floorRequestList)
-      # else:
-      #   print("Tomato")
+
 
   def door(self,elevator):
 
@@ -165,34 +164,34 @@ def main():
 
 # Scenario 1
 
-    # controller = Controller(1, 11, 3)
+    controller = Controller(1, 10, 2)
 
-    # column_test_case_1 = controller.columnList[0]
+    column_test_case_1 = controller.columnList[0]
     
-    # column_test_case_1.elevatorList[0].floor = 2
-    # column_test_case_1.elevatorList[0].direction = "IDLE"
+    column_test_case_1.elevatorList[0].floor = 2
+    column_test_case_1.elevatorList[0].direction = "IDLE"
 
 
 
-    # column_test_case_1.elevatorList[1].floor = 6
-    # column_test_case_1.elevatorList[1].direction = "IDLE"
+    column_test_case_1.elevatorList[1].floor = 6
+    column_test_case_1.elevatorList[1].direction = "IDLE"
 
 
-    # userPosition = 3
-    # userDirection = 'UP'
-    # userRequestFloor = 7
-    # best_elevator_scenario_1 = controller.requestElevator(userDirection, userPosition)
+    userPosition = 3
+    userDirection = 'UP'
+    userRequestFloor = 7
+    best_elevator_scenario_1 = controller.requestElevator(userDirection, userPosition)
 
-    # print("The best elevator for scenario 1 is " + str(best_elevator_scenario_1.ID))
-    # best_elevator_scenario_11 = controller.requestFloor(best_elevator_scenario_1, userRequestFloor)
+    print("The best elevator for scenario 1 is " + str(best_elevator_scenario_1.ID))
+    best_elevator_scenario_11 = controller.requestFloor(best_elevator_scenario_1, userRequestFloor)
 
-    # print("User has been successfully droppped at floor: " + str(best_elevator_scenario_11.floor))
+    print("User has been successfully droppped at floor: " + str(best_elevator_scenario_11.floor))
 
 
 
        # # Scenario 2
 
-    # controller = Controller(1, 11, 3)
+    # controller = Controller(1, 10, 2)
 
     # column_test_case_2 = controller.columnList[0]
     
@@ -223,12 +222,12 @@ def main():
 
 
     # best_elevator_scenario_2 = controller.requestElevator(userDirection, userPosition)
-    # # print("The best elevator for scenario 2.1 is " + str(best_elevator_scenario_2.ID))
+    # print("The best elevator for scenario 2.1 is " + str(best_elevator_scenario_2.ID))
 
-    # # best_elevator_scenario_2 = controller.requestFloor(best_elevator_scenario_2, userRequestFloor)
-    # # print("User has been successfully droppped at floor:" + str(best_elevator_scenario_2.floor))
+    # best_elevator_scenario_2 = controller.requestFloor(best_elevator_scenario_2, userRequestFloor)
+    # print("User has been successfully droppped at floor:" + str(best_elevator_scenario_2.floor))
 
-    # # userPosition = 9
+    # userPosition = 9
     # userDirection = 'DOWN'
     # userRequestFloor = 2
 
@@ -242,47 +241,47 @@ def main():
 # Scenario 3 
 
 
-    controller = Controller(1, 11, 3)
+    # controller = Controller(1, 10, 2)
 
-    column_test_case_3 = controller.columnList[0]
+    # column_test_case_3 = controller.columnList[0]
     
-    column_test_case_3.elevatorList[0].floor = 10
-    column_test_case_3.elevatorList[0].direction = "IDLE"
+    # column_test_case_3.elevatorList[0].floor = 10
+    # column_test_case_3.elevatorList[0].direction = "IDLE"
 
 
 
-    column_test_case_3.elevatorList[1].floor = 3
-    column_test_case_3.elevatorList[1].direction = "UP"
-    controller.move(column_test_case_3.elevatorList[1], 6)
+    # column_test_case_3.elevatorList[1].floor = 3
+    # column_test_case_3.elevatorList[1].direction = "UP"
+    # controller.move(column_test_case_3.elevatorList[1], 6)
 
 
 
-    userPosition = 3
-    userDirection = 'DOWN'
-    userRequestFloor = 2
+    # userPosition = 3
+    # userDirection = 'DOWN'
+    # userRequestFloor = 2
 
-    best_elevator_scenario_3 = controller.requestElevator(userDirection, userPosition)
-    print("The best elevator for scenario 3 is " + str(best_elevator_scenario_3.ID))
+    # best_elevator_scenario_3 = controller.requestElevator(userDirection, userPosition)
+    # print("The best elevator for scenario 3 is " + str(best_elevator_scenario_3.ID))
 
-    best_elevator_scenario_3 = controller.requestFloor(best_elevator_scenario_3, userRequestFloor)
-    print("User has been successfully droppped at floor: " + str(best_elevator_scenario_3.floor))
+    # best_elevator_scenario_3 = controller.requestFloor(best_elevator_scenario_3, userRequestFloor)
+    # print("User has been successfully droppped at floor: " + str(best_elevator_scenario_3.floor))
     
 
 
-    userPosition = 10
-    userDirection = 'DOWN'
-    userRequestFloor = 3
+    # userPosition = 10
+    # userDirection = 'DOWN'
+    # userRequestFloor = 3
 
 
-    column_test_case_3.elevatorList[1].floor = 6
-    column_test_case_3.elevatorList[1].direction = "IDLE"
+    # column_test_case_3.elevatorList[1].floor = 6
+    # column_test_case_3.elevatorList[1].direction = "IDLE"
 
 
-    best_elevator_scenario_3 = controller.requestElevator(userDirection, userPosition)
-    print("The found elevator for scenario 3.1 is " + str(best_elevator_scenario_3.ID))
+    # best_elevator_scenario_3 = controller.requestElevator(userDirection, userPosition)
+    # print("The found elevator for scenario 3.1 is " + str(best_elevator_scenario_3.ID))
 
-    best_elevator_scenario_3 = controller.requestFloor(best_elevator_scenario_3, userRequestFloor)
-    print("User has been successfully droppped at floor: " + str(best_elevator_scenario_3.floor))
+    # best_elevator_scenario_3 = controller.requestFloor(best_elevator_scenario_3, userRequestFloor)
+    # print("User has been successfully droppped at floor: " + str(best_elevator_scenario_3.floor))
 
 
 
