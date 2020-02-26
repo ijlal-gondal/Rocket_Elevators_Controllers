@@ -1,0 +1,10 @@
+/Users/ijlal/Documents/GitHub/Rocket_Elevators_Controllers/bin/Debug/netcoreapp3.1/Rocket_Elevators_Controllers.deps.json
+/Users/ijlal/Documents/GitHub/Rocket_Elevators_Controllers/bin/Debug/netcoreapp3.1/Rocket_Elevators_Controllers.runtimeconfig.json
+/Users/ijlal/Documents/GitHub/Rocket_Elevators_Controllers/bin/Debug/netcoreapp3.1/Rocket_Elevators_Controllers.runtimeconfig.dev.json
+/Users/ijlal/Documents/GitHub/Rocket_Elevators_Controllers/bin/Debug/netcoreapp3.1/Rocket_Elevators_Controllers.dll
+/Users/ijlal/Documents/GitHub/Rocket_Elevators_Controllers/bin/Debug/netcoreapp3.1/Rocket_Elevators_Controllers.pdb
+/Users/ijlal/Documents/GitHub/Rocket_Elevators_Controllers/obj/Debug/netcoreapp3.1/Rocket_Elevators_Controllers.csprojAssemblyReference.cache
+/Users/ijlal/Documents/GitHub/Rocket_Elevators_Controllers/obj/Debug/netcoreapp3.1/Rocket_Elevators_Controllers.AssemblyInfoInputs.cache
+/Users/ijlal/Documents/GitHub/Rocket_Elevators_Controllers/obj/Debug/netcoreapp3.1/Rocket_Elevators_Controllers.AssemblyInfo.cs
+/Users/ijlal/Documents/GitHub/Rocket_Elevators_Controllers/obj/Debug/netcoreapp3.1/Rocket_Elevators_Controllers.dll
+/Users/ijlal/Documents/GitHub/Rocket_Elevators_Controllers/obj/Debug/netcoreapp3.1/Rocket_Elevators_Controllers.pdb

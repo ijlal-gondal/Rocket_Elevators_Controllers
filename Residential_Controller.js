@@ -4,7 +4,7 @@ class Column {
         this.ID = "ID";
         this.elevatorList = [];
         this.floorTotal = [];
-        this.CallButtonList = [];
+ 
 
         for (let i = 1; i < floorTotal+1; i++) {
             this.floorTotal.push(i);
