@@ -13,9 +13,11 @@ namespace Rocket_Elevators_Controllers
 
         public Column(int ID, int elevatorTotal, int startFloor, int endFloor)
         {
-            // this.ID = ID;
+            this.ID = ID;
+            System.Console.WriteLine("Columnn ID: {0} ", ID);
             if (startFloor < 0)
             {
+                floorList.Add(1);
                 for (int i = startFloor; i >= endFloor; i--)
                 {
                     floorList.Add(i);
@@ -30,14 +32,14 @@ namespace Rocket_Elevators_Controllers
                     System.Console.Write(elevatorList[i - 1].ID + " | ");
 
                 }
-                System.Console.WriteLine("");
+                System.Console.WriteLine("\n");
 
             }
             else
             {
 
-
-                for (int i = startFloor; i < endFloor; i = i + 1)
+                floorList.Add(1);
+                for (int i = startFloor; i <= endFloor; i++)
                 {
                     floorList.Add(i);
 
@@ -52,11 +54,11 @@ namespace Rocket_Elevators_Controllers
                     System.Console.Write(elevatorList[i - 1].ID + " | ");
 
                 }
-                System.Console.WriteLine("");
+                System.Console.WriteLine("\n");
 
             }
 
-
+            
             // Console.WriteLine(string.Join(" | ", elevatorList));
 
         }

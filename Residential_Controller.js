@@ -4,14 +4,14 @@ class Column {
         this.ID = "ID";
         this.elevatorList = [];
         this.floorTotal = [];
- 
 
-        for (let i = 1; i < floorTotal+1; i++) {
+
+        for (let i = 1; i < floorTotal + 1; i++) {
             this.floorTotal.push(i);
             console.log(this.floorTotal);
         }
 
-        for (let i = 1; i < elevatorTotal+1; i++) {
+        for (let i = 1; i < elevatorTotal + 1; i++) {
             this.elevatorList.push(new Elevator(i, 1))
             console.log(this.elevatorList)
         }
@@ -37,7 +37,7 @@ class Controller {
         this.move(elevator, floor)
         console.log("request gives us an elevator : ", elevator)
         return elevator
-   
+
     }
     findElevator(direction, floor) {
 
@@ -45,7 +45,7 @@ class Controller {
         console.log('request direction:', direction)
         console.log('request floor: ', floor)
         let elevatorSubList = [];
-        this.columnList[0].elevatorList.forEach(function(elevator) {
+        this.columnList[0].elevatorList.forEach(function (elevator) {
 
             console.log("elevaror ID", elevator.ID);
             console.log('elevator floor', elevator.floor);
@@ -82,7 +82,7 @@ class Controller {
             }
             console.log("Found ELEVATOR", elevatorSubList);
         });
-           return this.findClosestElevator(elevatorSubList, floor);
+        return this.findClosestElevator(elevatorSubList, floor);
 
     }
 
@@ -92,9 +92,9 @@ class Controller {
         let closestElevator = elevatorSubList[0];
         let closeness = 10;
         // console.log('elevatorSubList[0]',elevatorSubList);
-        elevatorSubList.forEach(function(elevator) {
-              console.log('Math status',floor);
-              console.log('Math status 2',elevator.floor);
+        elevatorSubList.forEach(function (elevator) {
+            // console.log('Math status', floor);
+            // console.log('Math status 2', elevator.floor);
             if (Math.abs(floor - elevator.floor) < closeness) {
                 closeness = Math.abs(floor - elevator.floor);
                 closestElevator = elevator;
@@ -113,37 +113,39 @@ class Controller {
         return elevator
     }
 
-    move(elevator, floor) {
+    move(elevator, floor) 
+    {
 
         while (elevator.floorRequestList.length > 0) {
             // elevator.direction = "UP"
             if (elevator.floor < elevator.floorRequestList[0]) {
                 while (elevator.floor < elevator.floorRequestList[0]) {
-                    elevator.floor ++;
+                    elevator.floor++;
                     console.log("current floor: ", elevator.floor)
                 }
-                    this.door(elevator)
-                    // console.log("elevatorfloorlist status", elevator.floorRequestList)
-                    elevator.floorRequestList.pop(0)
-                    // console.log("elevatorfloorlist status", elevator.floorRequestList)
-                
+                this.door(elevator)
+                // console.log("elevatorfloorlist status", elevator.floorRequestList)
+                elevator.floorRequestList.pop(0)
+                // console.log("elevatorfloorlist status", elevator.floorRequestList)
+
             }
             // elevator.direction is "DOWN"
             else if (elevator.floor > elevator.floorRequestList[0]) {
                 while (elevator.floor > elevator.floorRequestList[0]) {
-                    elevator.floor --;
+                    elevator.floor--;
                     console.log("current floor: ", elevator.floor);
                 }
-                    this.door(elevator);
-                    // console.log("elevatorfloorlist status", elevator.floorRequestList);
-                    elevator.floorRequestList.pop(0);
-                    // console.log("elevatorfloorlist status", elevator.floorRequestList);
+                this.door(elevator);
+                // console.log("elevatorfloorlist status", elevator.floorRequestList);
+                elevator.floorRequestList.pop(0);
+                // console.log("elevatorfloorlist status", elevator.floorRequestList);
 
-                
+
             }
         }
     }
-    door(elevator) {
+    door(elevator) 
+    {
 
         if (elevator.floor == elevator.floorRequestList[0]) {
             elevator.door = "OPEN";

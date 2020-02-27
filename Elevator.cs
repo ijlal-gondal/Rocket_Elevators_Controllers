@@ -9,15 +9,15 @@ namespace Rocket_Elevators_Controllers
         public string  doors, direction;
         public int ID, floor;
         // ArrayList floorRequestList = new ArrayList();
-        double[] floorRequestList;
+        public List<int> floorRequestList = new List<int>();
 
         public Elevator(int ID, int floor) {
 
             this.ID = ID;
-            this.floor = floor;
+            this.floor = 1;
             this.doors = "CLOSE";
             this.direction = "IDLE";
-            this.floorRequestList = new double[] {};
+            this.floorRequestList = new List<int>();
             
         }
 
