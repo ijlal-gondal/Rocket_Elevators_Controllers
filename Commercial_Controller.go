@@ -110,13 +110,16 @@ func (b *Battery) NewBattery() {
 
 func (b *Battery) assignElevator(requestedFloor int) *Column {
 	var bestColumn Column
+	// elevator := Elevator{ID: 1}
+	// b.columnList[0].elevatorList = append(b.columnList[0].elevatorList, elevator)
+	fmt.Println("columnList test marc", b.columnList[0].elevatorList[0])
 
 	for i, eachColumn := range b.columnList {
 		if requestedFloor <= b.columnList[i].endFloor && requestedFloor >= b.columnList[i].startFloor {
 			bestColumn = eachColumn
 		}
 	}
-	fmt.Println("columnList", b.columnList[0].elevatorList[0])
+
 	fmt.Println("best Column for your requested floor is: ", bestColumn.ID)
 	// fmt.Println("")
 
