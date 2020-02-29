@@ -73,7 +73,7 @@ namespace Rocket_Elevators_Controllers
         {
 
             this.bestColumn = this.columnList.Where(c => c.floorList.Contains(requestedFloor)).FirstOrDefault();
-            System.Console.WriteLine("best Column for your requested floor is: {0}", bestColumn.ID);
+            System.Console.WriteLine("best Column for your requested floor is: {0} \n", bestColumn.ID);
 
             // sets user direction for top or basement floors
             if (bestColumn.ID == 1)
@@ -88,7 +88,7 @@ namespace Rocket_Elevators_Controllers
             }
             // looks for elevator       
             foundElevator = findElevator(userDirection, requestedFloor, userFloor);
-            System.Console.WriteLine("Best elevator for scenraio is : {0}", foundElevator.ID);
+            System.Console.WriteLine("Best elevator for current scenario is: {0} \n", foundElevator.ID);
             if (foundElevator.floor != userFloor)
             {
                 foundElevator.floorRequestList.Add(userFloor);
@@ -98,7 +98,7 @@ namespace Rocket_Elevators_Controllers
             foundElevator.floorRequestList.Add(requestedFloor);
             movedElevator = move(foundElevator, requestedFloor);
 
-            System.Console.WriteLine("The elevator has arrived at {0}", movedElevator.floor);
+            System.Console.WriteLine("The user has been dropped at {0}", movedElevator.floor);
 
 
 
@@ -134,7 +134,7 @@ namespace Rocket_Elevators_Controllers
 
             }
 
-
+            System.Console.WriteLine("\n");
             return findClosestElevator(elevatorSubList, userFloor);
 
 
@@ -145,7 +145,7 @@ namespace Rocket_Elevators_Controllers
         {
             closestElevator = elevatorSubList[0];
             closeness = 10;
-            System.Console.WriteLine(elevatorSubList[0].ID);
+            // System.Console.WriteLine(elevatorSubList[0].ID);
 
             foreach (Elevator elevator in elevatorSubList)
             {
@@ -169,7 +169,7 @@ namespace Rocket_Elevators_Controllers
         {
 
             this.bestColumn = this.columnList.Where(c => c.floorList.Contains(floorNumber)).FirstOrDefault();
-            System.Console.WriteLine("best Column for your requested floor is: {0}", bestColumn.ID);
+            System.Console.WriteLine("best Column for your requested floor is: {0} \n", bestColumn.ID);
 
             // sets user direction for top or basement floors
             if (bestColumn.ID == 1)
@@ -185,7 +185,7 @@ namespace Rocket_Elevators_Controllers
 
             // looks for elevator       
             foundElevator = returnElevator(userDirection, floorNumber, userDestination);
-            System.Console.WriteLine("Best elevator for scenario is : {0}", foundElevator.ID);
+            System.Console.WriteLine("Best elevator for current scenario is: {0} \n", foundElevator.ID);
             if (foundElevator.floor != floorNumber)
             {
                 foundElevator.floorRequestList.Add(floorNumber);
@@ -194,7 +194,7 @@ namespace Rocket_Elevators_Controllers
             foundElevator.floorRequestList.Add(userDestination);
             movedElevator = move(foundElevator, userDestination);
 
-            System.Console.WriteLine("The elevator has arrived at {0}", movedElevator.floor);
+            System.Console.WriteLine("The user has been dropped at floor: {0}", movedElevator.floor);
 
         }
         public Elevator returnElevator(string userDirection, int floorNumber, int userDestination)
@@ -221,7 +221,7 @@ namespace Rocket_Elevators_Controllers
 
 
             }
-
+            System.Console.WriteLine("\n");
             return returnClosestElevator(elevatorSubList, userDestination);
 
         }
@@ -246,7 +246,7 @@ namespace Rocket_Elevators_Controllers
 
         public Elevator move(Elevator elevator, int requestedFloor)
         {
-
+            Console.Write("Elevator Current floor: {0}", elevator.floor);
             while (elevator.floorRequestList.Count > 0)
             {
                 // elevator.direction = "UP"
@@ -254,10 +254,11 @@ namespace Rocket_Elevators_Controllers
                 {
                     while (elevator.floor < elevator.floorRequestList[0])
                     {
-                        elevator.floor++;
-                        Console.WriteLine("current floor: {0}", elevator.floor);
-                    }
 
+                        elevator.floor++;
+                        System.Console.Write(" - " + elevator.floor);
+                    }
+                    Console.WriteLine("\nElevator has arrived");
                     // Console.WriteLine("elevatorfloorlist status", elevator.floorRequestList)
                     door(elevator);
                     elevator.floorRequestList.RemoveAt(0);
@@ -271,9 +272,9 @@ namespace Rocket_Elevators_Controllers
                     while (elevator.floor > elevator.floorRequestList[0])
                     {
                         elevator.floor--;
-                        Console.WriteLine("current floor: {0} ", elevator.floor);
+                        Console.Write(" - " + elevator.floor);
                     }
-
+                    Console.WriteLine("\nElevator has arrived");
                     // Console.WriteLine("elevatorfloorlist status", elevator.floorRequestList);
                     door(elevator);
                     elevator.floorRequestList.RemoveAt(0);
@@ -283,7 +284,9 @@ namespace Rocket_Elevators_Controllers
 
                 }
 
+
             }
+
             return elevator;
         }
         public Elevator door(Elevator elevator)
@@ -301,6 +304,78 @@ namespace Rocket_Elevators_Controllers
             }
             return elevator;
         }
+        public void Scenario1()
+        {
+            // //Scenario 1
+
+
+            columnList[1].elevatorList[0].direction = "DOWN";
+            columnList[1].elevatorList[0].floor = 20;
+            columnList[1].elevatorList[1].direction = "UP";
+            columnList[1].elevatorList[1].floor = 3;
+            columnList[1].elevatorList[2].direction = "DOWN";
+            columnList[1].elevatorList[2].floor = 13;
+            columnList[1].elevatorList[3].direction = "DOWN";
+            columnList[1].elevatorList[3].floor = 15;
+            columnList[1].elevatorList[4].direction = "DOWN";
+            columnList[1].elevatorList[4].floor = 6;
+            AssignElevator(20);
+        }
+        public void Scenario2()
+        {
+            // //Scenario 2
+
+
+            columnList[2].elevatorList[0].direction = "UP";
+            columnList[2].elevatorList[0].floor = 1;
+            columnList[2].elevatorList[0].floorRequestList.Add(21);
+            columnList[2].elevatorList[1].direction = "UP";
+            columnList[2].elevatorList[1].floor = 23;
+            columnList[2].elevatorList[2].direction = "DOWN";
+            columnList[2].elevatorList[2].floor = 33;
+            columnList[2].elevatorList[3].direction = "DOWN";
+            columnList[2].elevatorList[3].floor = 40;
+            columnList[2].elevatorList[4].direction = "UP";
+            columnList[2].elevatorList[4].floor = 39;
+            AssignElevator(36);
+        }
+        public void Scenario3()
+        {
+            // //Scenario 3
+
+
+            columnList[3].elevatorList[0].direction = "DOWN";
+            columnList[3].elevatorList[0].floor = 58;
+            columnList[3].elevatorList[1].direction = "UP";
+            columnList[3].elevatorList[1].floor = 50;
+            columnList[3].elevatorList[2].direction = "UP";
+            columnList[3].elevatorList[2].floor = 46;
+            columnList[3].elevatorList[3].direction = "UP";
+            columnList[3].elevatorList[3].floor = 1;
+            columnList[3].elevatorList[4].direction = "DOWN";
+            columnList[3].elevatorList[4].floor = 60;
+            RequestElevator(54);
+        }
+        public void Scenario4()
+        {
+            // //Scenario 4
+
+
+            columnList[0].elevatorList[0].direction = "IDLE";
+            columnList[0].elevatorList[0].floor = -4;
+            columnList[0].elevatorList[1].direction = "IDLE";
+            columnList[0].elevatorList[1].floor = 1;
+            columnList[0].elevatorList[2].direction = "DOWN";
+            columnList[0].elevatorList[2].floor = -3;
+            columnList[0].elevatorList[3].direction = "UP";
+            columnList[0].elevatorList[3].floor = -6;
+            columnList[0].elevatorList[4].direction = "DOWN";
+            columnList[0].elevatorList[4].floor = -1;
+            RequestElevator(-3);
+        }
+
+
+
 
 
     }
@@ -308,33 +383,3 @@ namespace Rocket_Elevators_Controllers
 
 }
 
-// if (columnTotal == 1)
-// {
-//     elevatorTotal = elevatorPerColumn * columnTotal;
-//     for (int i = 0; i < columnTotal; i++)
-//     {
-//         columnList.Add(new Column(elevatorTotal, floorTotal));
-//         Console.WriteLine(columnList);
-//     }
-// }
-// else
-// {
-
-
-// for (i = 0; i < elevatorTotal + 1; i++)
-// {
-//     columnList.Add(new Column(i, 1));
-//     // Console.WriteLine(elevatorList);
-// }
-
-// try {
-// catch{
-//     System.Console.WriteLine("Your target floor should be between -6 & 66 ");
-// }
-
-// else if ((floorNumber == elevator.floor) && (userDirection == elevator.direction))
-// {
-//     elevatorSubList.Add(elevator);
-
-// }
-// System.Console.WriteLine(elevatorSubList[0]);
